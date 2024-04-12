@@ -1,0 +1,65 @@
+<%-- 
+    Document   : newjsp
+    Created on : Apr 3, 2024, 11:26:06 AM
+    Author     : rishi
+--%>
+       
+<%@page import="java.text.*"%>
+<%@page import="java.util.Locale"%>
+<%@page import="java.text.DecimalFormat"%>
+<%@page import="java.util.*"%>
+
+<%@page import="pack.NewClass"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+        <style>
+            table,th,td{
+                border-collapse: collapse;
+                border : 2px solid black;
+            }
+        </style>
+    </head>
+    <body>
+       <%
+       ArrayList<NewClass> al=new ArrayList<NewClass>();
+        al.add(new NewClass("JohnDoe","john.doe@example.com",1234567890,"123mainst."));
+        al.add(new NewClass("Jane Smith","jane.smith@example.com",234567901,"456OakAve"));
+      
+
+       
+        Collections.sort(al, new Comparator<NewClass>()
+       {
+       public int compare(NewClass s1,NewClass s2)
+       {
+        return s2.phone-(s1.phone);
+        }
+       }
+        );
+       pageContext.setAttribute("stu", al);
+    %>   
+  String formatPhoneNumber(long phoneNumber){
+    DecimalFormat df = new DecimalFormat("0000000000");
+    String formatted = df.format(phoneNumber);
+    return "(" + formatted.substring(0, 3) + ") " + formatted.substring(3, 6) + "-" + formatted.substring(6);
+  }
+
+       <table ><tr ><th>Name</th><th>email</th><th>phone<th>address</th></tr>
+           
+       <c:forEach items="${pageScope.stu}" var="stu" varStatus="status">
+           
+                   <tr ><td><c:out value="${stu.name}"/></td>
+                   <td><c:out value="${stu.email}"/></td>
+<td><c:out value="${formatPhoneNumber(stu.phone)}"/></td>
+                   <td><c:out value="${stu.address}"/></td></tr>
+
+             
+           
+       </c:forEach>
+       </table>
+    </body>
+</html>
